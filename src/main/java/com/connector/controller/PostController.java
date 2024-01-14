@@ -21,10 +21,10 @@ public class PostController {
     private final PostService postService;
 
     @PostMapping
-    public void createPost(@RequestBody CreatePostDto postDto) {
+    public PostDetailResponseDto createPost(@RequestBody CreatePostDto postDto) {
         TokenContext context = TokenContextHolder.getContext();
         Long userId = context.getUserId();
-        postService.createPost(userId, postDto);
+        return postService.createPost(userId, postDto);
     }
 
     @GetMapping

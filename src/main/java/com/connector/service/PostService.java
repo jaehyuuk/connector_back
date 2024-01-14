@@ -1,5 +1,6 @@
 package com.connector.service;
 
+import com.connector.domain.Post;
 import com.connector.dto.CreatePostDto;
 import com.connector.dto.PostDetailResponseDto;
 import com.connector.dto.PostResponseDto;
@@ -18,8 +19,9 @@ public class PostService {
 
     private final PostRepository postRepository;
 
-    public void createPost(Long userId, CreatePostDto postDto) {
-        postRepository.save(postDto.toEntity(userId));
+    public PostDetailResponseDto createPost(Long userId, CreatePostDto postDto) {
+        Post post = postRepository.save(postDto.toEntity(userId));
+        return getPostById(post.getId());
     }
 
     public List<PostResponseDto> getPosts() {
