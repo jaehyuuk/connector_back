@@ -18,6 +18,10 @@ public class UserService {
 
     @Transactional
     public TokenResponseDto join(RegisterDto registerDto) {
+        if (registerDto.getName().isEmpty() || registerDto.getPassword().isEmpty() || registerDto.getEmail().isEmpty()
+        ) {
+            throw new BadRequestException("Not empty");
+        }
         if (userRepository.existsByEmail(registerDto.getEmail())) {
             throw new BadRequestException("User already exists");
         }
