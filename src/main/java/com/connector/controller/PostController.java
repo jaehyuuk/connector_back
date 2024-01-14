@@ -1,6 +1,7 @@
 package com.connector.controller;
 
 import com.connector.dto.CreatePostDto;
+import com.connector.dto.PostDetailResponseDto;
 import com.connector.dto.PostResponseDto;
 import com.connector.global.context.TokenContext;
 import com.connector.global.context.TokenContextHolder;
@@ -29,5 +30,12 @@ public class PostController {
     @GetMapping
     public List<PostResponseDto> getPosts() {
         return postService.getPosts();
+    }
+
+    @GetMapping("/{post_id}")
+    public PostDetailResponseDto getPostById(
+            @PathVariable(value = "post_id") final Long postId
+    ) {
+        return postService.getPostById(postId);
     }
 }
