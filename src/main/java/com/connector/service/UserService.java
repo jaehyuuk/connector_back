@@ -23,6 +23,7 @@ public class UserService {
             throw new BadRequestException("Not empty");
         }
         if (userRepository.existsByEmail(registerDto.getEmail())) {
+
             throw new BadRequestException("User already exists");
         }
         User user = userRepository.save(registerDto.toEntity());

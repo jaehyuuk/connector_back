@@ -6,7 +6,6 @@ import io.swagger.v3.oas.annotations.media.Schema;
 import lombok.Getter;
 
 import java.util.ArrayList;
-import java.util.List;
 
 @Getter
 public class UpsertProfileDto {
