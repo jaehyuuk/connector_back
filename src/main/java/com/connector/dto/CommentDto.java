@@ -1,6 +1,7 @@
 package com.connector.dto;
 
 import com.connector.domain.Comment;
+import io.swagger.v3.oas.annotations.media.Schema;
 import lombok.AllArgsConstructor;
 import lombok.Getter;
 
@@ -8,8 +9,11 @@ import lombok.Getter;
 @AllArgsConstructor
 public class CommentDto {
     private Long id;
+    @Schema(description = "내용", example = "Content")
     private String text;
+    @Schema(description = "작성자", example = "Eric")
     private String name;
+    @Schema(description = "유저 아바타")
     private String avatar;
     private Long userId;
 
