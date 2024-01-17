@@ -7,7 +7,6 @@ import com.connector.global.context.TokenContext;
 import com.connector.global.context.TokenContextHolder;
 import com.connector.service.PostService;
 import io.swagger.v3.oas.annotations.tags.Tag;
-import lombok.Getter;
 import lombok.RequiredArgsConstructor;
 import org.springframework.web.bind.annotation.*;
 
@@ -22,12 +21,12 @@ public class PostController {
     private final PostService postService;
 
     @PostMapping
-    public void createPost(
+    public PostDetailDto createPost(
             @RequestBody CreatePostDto postDto
     ) {
         TokenContext context = TokenContextHolder.getContext();
         Long userId = context.getUserId();
-        postService.createPost(userId, postDto);
+        return postService.createPost(userId, postDto);
     }
 
     @GetMapping
