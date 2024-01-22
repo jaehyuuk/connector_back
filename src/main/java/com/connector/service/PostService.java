@@ -1,5 +1,6 @@
 package com.connector.service;
 
+import com.connector.domain.Comment;
 import com.connector.domain.Like;
 import com.connector.domain.Post;
 import com.connector.domain.User;
@@ -102,5 +103,22 @@ public class PostService {
         return post.getComments().stream()
                 .map(CommentDto::getCommentDto)
                 .collect(Collectors.toList());
+    }
+
+    @Transactional
+    public void removeComment(Long userId, Long postId, Long commentId) {
+        Post post = postRepository.findById(postId).orElseThrow(
+                () -> new BadRequestException("Not Post")
+        );
+
+        Map<Long, Comment> comments = post.getComments()
+                .stream()
+                .collect(Collectors.toMap(Comment::getId, Function.identity()));
+
+        if (!comments.containsKey(commentId)) {
+            throw new BadRequestException("댓글 삭제는 댓글을 단 게시물에만 가능합니다.");
+        }
+
+        post.removeComment(comments.get(commentId), userId);
     }
 }

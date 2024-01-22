@@ -1,5 +1,6 @@
 package com.connector.domain;
 
+import com.connector.global.exception.BadRequestException;
 import lombok.Builder;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
@@ -30,10 +31,10 @@ public class Post {
     @Column(name = "created_at")
     private LocalDateTime createdAt;
 
-    @OneToMany(mappedBy = "post", cascade = CascadeType.ALL, orphanRemoval = true) // 참조를 당하는 쪽에서 읽기만 가능
+    @OneToMany(mappedBy = "post", cascade = CascadeType.ALL, orphanRemoval = true)
     private List<Like> likes = new ArrayList<>();
 
-    @OneToMany(mappedBy = "post", cascade = CascadeType.ALL) // 참조를 당하는 쪽에서 읽기만 가능
+    @OneToMany(mappedBy = "post", cascade = CascadeType.ALL, orphanRemoval = true)
     private List<Comment> comments = new ArrayList<>();
 
     @Builder
@@ -67,6 +68,20 @@ public class Post {
         this.comments.add(comment);
         if(comment.getPost() != this) {
             comment.setPost(this);
+        }
+    }
+
+    public void removeComment(Comment comment, Long userId) {
+        if(comment.getWriter().getId() != userId) {
+            throw new BadRequestException("댓글 삭제는 댓글 작성자만 가능합니다.");
+        }
+
+        Iterator<Comment> iterator = this.comments.iterator();
+        while (iterator.hasNext()) {
+            Comment e = iterator.next();
+            if (comment.equals(e)) {
+                iterator.remove();
+            }
         }
     }
 }
