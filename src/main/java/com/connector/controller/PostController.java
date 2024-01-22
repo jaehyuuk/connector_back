@@ -54,4 +54,13 @@ public class PostController {
         Long userId = context.getUserId();
         postService.likePost(userId, postId);
     }
+
+    @PutMapping("/unlike/{post-id}")
+    public void unlikePost(
+            @PathVariable(value = "post-id") final Long postId
+    ) {
+        TokenContext context = TokenContextHolder.getContext();
+        Long userId = context.getUserId();
+        postService.unlikePost(userId, postId);
+    }
 }

@@ -15,6 +15,7 @@ import javax.persistence.OneToMany;
 import javax.persistence.Table;
 import java.time.LocalDateTime;
 import java.util.ArrayList;
+import java.util.Iterator;
 import java.util.List;
 
 @Getter
@@ -57,6 +58,16 @@ public class Post {
         this.likes.add(like);
         if(like.getPost() != this) {
             like.setPost(this);
+        }
+    }
+
+    public void removeLike(Like like) {
+        Iterator<Like> iterator = this.likes.iterator();
+        while (iterator.hasNext()) {
+            Like e = iterator.next();
+            if (like.equals(e)) {
+                iterator.remove();
+            }
         }
     }
 }
