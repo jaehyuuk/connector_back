@@ -97,5 +97,13 @@ public class PostController {
         postService.deletePost(postId);
     }
 
+    @PutMapping("/like/{post_id}")
+    public void likePost(
+            @PathVariable("post_id") Long postId
+    ) {
+        TokenContext context = TokenContextHolder.getContext();
+        Long userId = context.getUserId();
+        postService.likePost(userId, postId);
+    }
 
 }
