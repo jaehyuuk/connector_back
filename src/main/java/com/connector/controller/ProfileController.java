@@ -55,7 +55,7 @@ public class ProfileController {
             }
     )
     public ProfileDetailDto getOneProfile(
-            @PathVariable("userId") Long userId
+            @PathVariable("userId") final Long userId
     ) {
         return profileService.getOneProfile(userId);
     }
@@ -97,13 +97,21 @@ public class ProfileController {
     }
 
     @DeleteMapping
+    @Operation(summary = "회원 탈퇴 API", description = "회원을 탈퇴한다.")
+    @ApiResponse(
+            responseCode = "200",
+            content = {
+                    @Content(
+                            mediaType = "application/json",
+                            array = @ArraySchema(schema = @Schema(implementation = ProfileDto.class))
+                    )
+            }
+    )
     public void deleteProfile() {
         TokenContext context = TokenContextHolder.getContext();
         Long userId = context.getUserId();
         profileService.deleteProfile(userId);
     }
-
-
 
     @PutMapping("/experience")
     @Operation(summary = "경력 추가 API", description = "경력을 추가 한다.")
@@ -137,7 +145,7 @@ public class ProfileController {
             }
     )
     public void deleteExperience(
-            @PathVariable("experience_id") Long experienceId
+            @PathVariable("experience_id") final Long experienceId
     ) {
         profileService.deleteExperience(experienceId);
     }
@@ -174,7 +182,7 @@ public class ProfileController {
             }
     )
     public void deleteEducation(
-            @PathVariable("education_id") Long educationId
+            @PathVariable("education_id") final Long educationId
     ) {
         profileService.deleteEducation(educationId);
     }

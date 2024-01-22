@@ -1,5 +1,6 @@
 package com.connector.controller;
 
+import com.connector.domain.Like;
 import com.connector.dto.*;
 import com.connector.global.context.TokenContext;
 import com.connector.global.context.TokenContextHolder;
@@ -72,7 +73,7 @@ public class PostController {
             }
     )
     public PostDetailDto getOnePost(
-            @PathVariable("post_id") Long postId
+            @PathVariable("post_id") final Long postId
     ) {
         return postService.getOnePost(postId);
     }
@@ -90,14 +91,25 @@ public class PostController {
             }
     )
     public void deletePost(
-            @PathVariable("post_id") Long postId
+            @PathVariable("post_id") final Long postId
     ){
         postService.deletePost(postId);
     }
 
     @PutMapping("/like/{post_id}")
+    @Operation(summary = "게시물 좋아요 API", description = "게시물에 좋아요를 줄 수 있다.")
+    @Parameter(name = "post_id", description = "post ID", in = ParameterIn.PATH)
+    @ApiResponse(
+            responseCode = "200",
+            content = {
+                    @Content(
+                            mediaType = "application/json",
+                            array = @ArraySchema(schema = @Schema(implementation = Like.class))
+                    )
+            }
+    )
     public void likePost(
-            @PathVariable("post_id") Long postId
+            @PathVariable("post_id") final Long postId
     ) {
         TokenContext context = TokenContextHolder.getContext();
         Long userId = context.getUserId();
@@ -105,6 +117,17 @@ public class PostController {
     }
 
     @PutMapping("/unlike/{post-id}")
+    @Operation(summary = "게시물 좋아요 취소 API", description = "게시물에 좋아요를 취소할 수 있다.")
+    @Parameter(name = "post_id", description = "post ID", in = ParameterIn.PATH)
+    @ApiResponse(
+            responseCode = "200",
+            content = {
+                    @Content(
+                            mediaType = "application/json",
+                            array = @ArraySchema(schema = @Schema(implementation = Like.class))
+                    )
+            }
+    )
     public void unlikePost(
             @PathVariable(value = "post-id") final Long postId
     ) {
@@ -114,6 +137,17 @@ public class PostController {
     }
 
     @PostMapping("/comment/{post-id}")
+    @Operation(summary = "게시물 댓글 작성 API", description = "게시물에 댓글을 작성 할 수 있다.")
+    @Parameter(name = "post_id", description = "post ID", in = ParameterIn.PATH)
+    @ApiResponse(
+            responseCode = "200",
+            content = {
+                    @Content(
+                            mediaType = "application/json",
+                            array = @ArraySchema(schema = @Schema(implementation = CommentDto.class))
+                    )
+            }
+    )
     public List<CommentDto> addComment(
             @PathVariable(value = "post-id") final Long postId,
             @RequestBody CreateCommentDto commentDto
@@ -124,6 +158,18 @@ public class PostController {
     }
 
     @DeleteMapping("/comment/{post-id}/{comment-id}")
+    @Operation(summary = "게시물 댓글 삭제 API", description = "게시물에 댓글을 삭제 할 수 있다.")
+    @Parameter(name = "post_id", description = "post ID", in = ParameterIn.PATH)
+    @Parameter(name = "comment_id", description = "comment ID", in = ParameterIn.PATH)
+    @ApiResponse(
+            responseCode = "200",
+            content = {
+                    @Content(
+                            mediaType = "application/json",
+                            array = @ArraySchema(schema = @Schema(implementation = CommentDto.class))
+                    )
+            }
+    )
     public void removeComment(
             @PathVariable(value = "post-id") final Long postId,
             @PathVariable(value = "comment-id") final Long commentId
