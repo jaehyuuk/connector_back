@@ -1,5 +1,6 @@
 package com.connector.domain;
 
+import lombok.Builder;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 
@@ -26,4 +27,26 @@ public class Like {
     @ManyToOne(fetch= FetchType.LAZY, optional = false)
     @JoinColumn(name = "post_id")
     private Post post;
+
+    @Column(name = "user_id")
+    private Long userId;
+
+
+    @Builder
+    public Like(Long id, Post post, Long userId) {
+        this.id = id;
+        this.post = post;
+        this.userId = userId;
+    }
+
+    public void setPost(Post post) {
+        if (this.post != null) {
+            this.post.getLikes().remove(this);
+        }
+        this.post = post;
+
+        if (!post.getLikes().contains(this)) {
+            post.getLikes().add(this);
+        }
+    }
 }

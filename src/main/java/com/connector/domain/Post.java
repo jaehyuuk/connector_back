@@ -52,4 +52,11 @@ public class Post {
         this.likes = likes;
         this.comments = comments;
     }
+
+    public void addLike(Like like) {
+        this.likes.add(like);
+        if(like.getPost() != this) {
+            like.setPost(this);
+        }
+    }
 }
