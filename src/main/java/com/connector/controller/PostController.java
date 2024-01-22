@@ -71,4 +71,14 @@ public class PostController {
         Long userId = context.getUserId();
         return postService.addComment(userId, postId, commentDto);
     }
+
+    @DeleteMapping("/comment/{post-id}/{comment-id}")
+    public void removeComment(
+            @PathVariable(value = "post-id") final Long postId,
+            @PathVariable(value = "comment-id") final Long commentId
+    ) {
+        TokenContext context = TokenContextHolder.getContext();
+        Long userId = context.getUserId();
+        postService.removeComment(userId, postId, commentId);
+    }
 }
