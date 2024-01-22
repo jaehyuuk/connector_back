@@ -1,5 +1,6 @@
 package com.connector.domain;
 
+import lombok.Builder;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 
@@ -38,4 +39,24 @@ public class Comment {
 
     @Column(name = "created_at")
     private LocalDateTime createdAt;
+
+    public void setPost(Post post) {
+        if (this.post != null) {
+            this.post.getComments().remove(this);
+        }
+        this.post = post;
+
+        if (!post.getComments().contains(this)) {
+            post.getComments().add(this);
+        }
+    }
+
+    @Builder
+    public Comment(Long id, Post post, User writer, String content, LocalDateTime createdAt) {
+        this.id = id;
+        this.post = post;
+        this.writer = writer;
+        this.content = content;
+        this.createdAt = createdAt;
+    }
 }

@@ -11,7 +11,7 @@ public class CreatePostDto {
     private String text;
 
     public Post toEntity(Long userId) {
-        return new Post().builder()
+        return Post.builder()
                 .userId(userId)
                 .content(text)
                 .createdAt(LocalDateTime.now())

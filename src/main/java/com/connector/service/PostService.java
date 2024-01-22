@@ -2,11 +2,11 @@ package com.connector.service;
 
 import com.connector.domain.Like;
 import com.connector.domain.Post;
-import com.connector.dto.CreatePostDto;
-import com.connector.dto.PostDetailResponseDto;
-import com.connector.dto.PostResponseDto;
+import com.connector.domain.User;
+import com.connector.dto.*;
 import com.connector.global.exception.BadRequestException;
 import com.connector.repository.PostRepository;
+import com.connector.repository.UserRepository;
 import com.connector.repository.model.GetPostRequestModel;
 import com.connector.repository.model.GetPostResponseModel;
 import lombok.RequiredArgsConstructor;
@@ -23,6 +23,7 @@ import java.util.stream.Collectors;
 public class PostService {
 
     private final PostRepository postRepository;
+    private final UserRepository userRepository;
 
     @Transactional
     public PostDetailResponseDto createPost(Long userId, CreatePostDto postDto) {
@@ -85,6 +86,23 @@ public class PostService {
             throw new BadRequestException("좋아요 취소는 좋아요를 누른 게시물에만 가능합니다.");
         }
         post.removeLike(likes.get(userId));
+    }
+
+    @Transactional
+    public List<CommentResponseDto> addComment(Long userId, Long postId, CreateCommentDto commentDto) {
+        Post post = postRepository.findById(postId).orElseThrow(
+                () -> new BadRequestException("Not Post")
+        );
+
+        User user = userRepository.findById(userId).orElseThrow(
+                () -> new BadRequestException("Not User")
+        );
+
+        post.addComment(commentDto.toEntity(user));
+
+        return post.getComments().stream()
+                .map(CommentResponseDto::of)
+                .collect(Collectors.toList());
     }
 
 }

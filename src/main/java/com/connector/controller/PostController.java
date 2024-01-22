@@ -1,8 +1,6 @@
 package com.connector.controller;
 
-import com.connector.dto.CreatePostDto;
-import com.connector.dto.PostDetailResponseDto;
-import com.connector.dto.PostResponseDto;
+import com.connector.dto.*;
 import com.connector.global.context.TokenContext;
 import com.connector.global.context.TokenContextHolder;
 import com.connector.service.PostService;
@@ -62,5 +60,15 @@ public class PostController {
         TokenContext context = TokenContextHolder.getContext();
         Long userId = context.getUserId();
         postService.unlikePost(userId, postId);
+    }
+
+    @PostMapping("/comment/{post-id}")
+    public List<CommentResponseDto> addComment(
+            @PathVariable(value = "post-id") final Long postId,
+            @RequestBody CreateCommentDto commentDto
+    ) {
+        TokenContext context = TokenContextHolder.getContext();
+        Long userId = context.getUserId();
+        return postService.addComment(userId, postId, commentDto);
     }
 }
