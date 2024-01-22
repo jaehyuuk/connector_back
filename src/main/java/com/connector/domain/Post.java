@@ -62,4 +62,11 @@ public class Post {
             }
         }
     }
+
+    public void addComment(Comment comment) {
+        this.comments.add(comment);
+        if(comment.getPost() != this) {
+            comment.setPost(this);
+        }
+    }
 }
