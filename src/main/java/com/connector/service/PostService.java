@@ -11,6 +11,7 @@ import com.connector.repository.model.GetPostRequestModel;
 import com.connector.repository.model.GetPostResponseModel;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 
 import java.util.List;
 import java.util.stream.Collectors;
@@ -21,11 +22,13 @@ public class PostService {
 
     private final PostRepository postRepository;
 
+    @Transactional
     public PostDetailResponseDto createPost(Long userId, CreatePostDto postDto) {
         Post post = postRepository.save(postDto.toEntity(userId));
         return getPostById(post.getId());
     }
 
+    @Transactional(readOnly = true)
     public List<PostResponseDto> getPosts() {
         List<GetPostResponseModel> posts = postRepository.getPosts(GetPostRequestModel.builder().build());
 
@@ -34,6 +37,7 @@ public class PostService {
                 .collect(Collectors.toList());
     }
 
+    @Transactional(readOnly = true)
     public PostDetailResponseDto getPostById(Long postId) {
         GetPostResponseModel post = postRepository.getPostById(GetPostRequestModel.builder()
                 .postId(postId)
@@ -42,10 +46,12 @@ public class PostService {
         return PostDetailResponseDto.of(post);
     }
 
+    @Transactional
     public void deletePost(Long postId) {
         postRepository.deleteById(postId);
     }
 
+    @Transactional
     public void likePost(Long userId, Long postId) {
         Post post = postRepository.findById(postId).orElseThrow(
                 () -> new BadRequestException("Not Post")
