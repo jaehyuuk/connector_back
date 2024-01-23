@@ -20,6 +20,7 @@ public class RegisterDto {
                 .name(name)
                 .email(email)
                 .password(password)
+                .avatar("https://raw.githubusercontent.com/jaehyuuk/file_uproad/main/blank-profile.png") // 최초 가입시 기본 프로필 이미지 설정
                 .build();
     }
 }
